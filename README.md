@@ -32,9 +32,7 @@ A professional Laravel-based task management system with role-based access contr
 - **Database**: SQLite (easily switchable to MySQL/PostgreSQL)
 - **Authentication**: Laravel Auth with session management
 
-## 📦 Installation
-
-### Local Development
+## 📦 Local Installation
 
 ```bash
 # Clone the repository
@@ -62,33 +60,71 @@ Visit `http://127.0.0.1:8000`
 - **Manager**: `manager@officeflow.com` / `password`
 - **Employee**: `employee@officeflow.com` / `password`
 
-## 🌐 Deployment
+## 🚂 Railway Deployment
 
-### Vercel Deployment
+### Quick Deploy
 
-This project is configured for Vercel deployment with SQLite database.
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/Abrar090909/officeflow)
 
-1. **Push to GitHub** (already done)
-2. **Import to Vercel**:
-   - Go to [vercel.com](https://vercel.com)
+### Manual Deployment
+
+1. **Create Railway Account**
+   - Go to [railway.app](https://railway.app)
+   - Sign up with GitHub
+
+2. **Create New Project**
    - Click "New Project"
-   - Import from GitHub: `Abrar090909/officeflow`
-   - Framework Preset: **Other**
-   - Click "Deploy"
+   - Select "Deploy from GitHub repo"
+   - Choose `Abrar090909/officeflow`
 
-3. **Environment Variables** (Set in Vercel Dashboard):
+3. **Configure Environment Variables**
+   
+   Railway will auto-detect Laravel, but add these variables:
+   
    ```
-   APP_KEY=base64:YOUR_GENERATED_KEY_HERE
+   APP_NAME=OfficeFlow
    APP_ENV=production
    APP_DEBUG=false
+   APP_KEY=base64:QBgOwLW0AoJKUHwzomU7Cwg7mxRSEGtscdzpMwy1eBU=
+   APP_URL=https://your-app.railway.app
+   
    DB_CONNECTION=sqlite
+   
    SESSION_DRIVER=cookie
-   CACHE_DRIVER=array
+   SESSION_LIFETIME=120
+   
+   CACHE_DRIVER=file
+   QUEUE_CONNECTION=sync
+   
+   LOG_CHANNEL=stderr
    ```
 
-4. **Post-Deployment**:
-   - Run migrations via Vercel CLI or dashboard
-   - Seed demo data if needed
+4. **Deploy**
+   - Railway auto-deploys on every push to `main`
+   - First deployment runs migrations and seeders automatically
+   - Check logs for deployment status
+
+5. **Access Your App**
+   - Railway provides a public URL: `https://officeflow-production.up.railway.app`
+   - Login with demo credentials
+
+### Post-Deployment (Optional)
+
+If you need to re-run migrations or seeders:
+
+```bash
+# Install Railway CLI
+npm i -g @railway/cli
+
+# Login
+railway login
+
+# Link to your project
+railway link
+
+# Run commands
+railway run php artisan migrate:fresh --seed
+```
 
 ## 📁 Project Structure
 
@@ -136,22 +172,10 @@ office-flow/
    - Real-time activity feed
    - Advanced filtering and search
 
-4.  **UI/UX**:
+4. **UI/UX**:
    - Responsive Bootstrap 5 design
    - Clean, professional WordPress-inspired aesthetic
    - Intuitive role-specific interfaces
-
-## 📸 Screenshots
-
-### Employee Dashboard
-- Create tasks with priorities and categories
-- Track task status in real-time
-- View personal task queue
-
-### Manager Dashboard
-- Review and approve/reject tasks
-- Provide feedback via comments
-- Monitor team activity
 
 ## 🔒 Security Features
 
@@ -160,6 +184,26 @@ office-flow/
 - Session management with regeneration
 - Input validation and sanitization
 - Role-based access control
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+**Database not found:**
+```bash
+railway run php artisan migrate:fresh --seed
+```
+
+**File permissions:**
+```bash
+chmod -R 775 storage bootstrap/cache
+```
+
+**Clear cache:**
+```bash
+railway run php artisan cache:clear
+railway run php artisan config:clear
+```
 
 ## 📝 License
 
