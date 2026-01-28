@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: officeflow
+    env: php
+    plan: free
+    buildCommand: |
+      composer install --optimize-autoloader --no-dev
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+    startCommand: |
+      php artisan migrate --force
+      php artisan db:seed --force
+      php artisan serve --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: APP_KEY
+        sync: false
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: SESSION_DRIVER
+        value: cookie
+      - key: CACHE_DRIVER
+        value: file
+      - key: LOG_CHANNEL
+        value: stderr
+
+databases:
+  - name: officeflow-db
+    plan: free
+    databaseName: officeflow
+    user: officeflow

@@ -60,71 +60,55 @@ Visit `http://127.0.0.1:8000`
 - **Manager**: `manager@officeflow.com` / `password`
 - **Employee**: `employee@officeflow.com` / `password`
 
-## 🚂 Railway Deployment
+## 🌐 Easy Deployment - Render.com (Recommended)
 
-### Quick Deploy
+### One-Click Deploy
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/Abrar090909/officeflow)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Abrar090909/officeflow)
 
-### Manual Deployment
+### Manual Deployment Steps
 
-1. **Create Railway Account**
-   - Go to [railway.app](https://railway.app)
-   - Sign up with GitHub
+1. **Sign Up on Render**
+   - Go to [render.com](https://render.com)
+   - Sign up with GitHub (free tier available)
 
-2. **Create New Project**
-   - Click "New Project"
-   - Select "Deploy from GitHub repo"
-   - Choose `Abrar090909/officeflow`
+2. **Create New Web Service**
+   - Click "**New +**" → "**Web Service**"
+   - Connect your GitHub account
+   - Select repository: `Abrar090909/officeflow`
 
-3. **Configure Environment Variables**
+3. **Configure Service**
+   - **Name**: `officeflow`
+   - **Environment**: `PHP`
+   - **Build Command**: `composer install --optimize-autoloader --no-dev && php artisan config:cache`
+   - **Start Command**: `php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT`
+
+4. **Add Environment Variables**
    
-   Railway will auto-detect Laravel, but add these variables:
+   In Render dashboard, add these environment variables:
    
    ```
-   APP_NAME=OfficeFlow
+   APP_KEY=base64:QBgOwLW0AoJKUHwzomU7Cwg7mxRSEGtscdzpMwy1eBU=
    APP_ENV=production
    APP_DEBUG=false
-   APP_KEY=base64:QBgOwLW0AoJKUHwzomU7Cwg7mxRSEGtscdzpMwy1eBU=
-   APP_URL=https://your-app.railway.app
-   
    DB_CONNECTION=sqlite
-   
    SESSION_DRIVER=cookie
-   SESSION_LIFETIME=120
-   
-   CACHE_DRIVER=file
-   QUEUE_CONNECTION=sync
-   
    LOG_CHANNEL=stderr
    ```
 
-4. **Deploy**
-   - Railway auto-deploys on every push to `main`
-   - First deployment runs migrations and seeders automatically
-   - Check logs for deployment status
+5. **Deploy**
+   - Click "**Create Web Service**"
+   - Wait 3-5 minutes for initial deployment
+   - Your app will be live at `https://officeflow.onrender.com`
 
-5. **Access Your App**
-   - Railway provides a public URL: `https://officeflow-production.up.railway.app`
-   - Login with demo credentials
+### Why Render.com?
 
-### Post-Deployment (Optional)
-
-If you need to re-run migrations or seeders:
-
-```bash
-# Install Railway CLI
-npm i -g @railway/cli
-
-# Login
-railway login
-
-# Link to your project
-railway link
-
-# Run commands
-railway run php artisan migrate:fresh --seed
-```
+✅ Native PHP/Laravel support  
+✅ Automatic HTTPS  
+✅ Free tier with 750 hours/month  
+✅ Auto-deploys on GitHub push  
+✅ Built-in PostgreSQL (optional)  
+✅ Better error logging than Railway
 
 ## 📁 Project Structure
 
@@ -187,22 +171,23 @@ office-flow/
 
 ## 🛠️ Troubleshooting
 
-### Common Issues
+### Render-Specific Issues
 
-**Database not found:**
+**Migrations not running:**
 ```bash
-railway run php artisan migrate:fresh --seed
+# Add to start command
+php artisan migrate:fresh --seed --force
 ```
 
 **File permissions:**
-```bash
-chmod -R 775 storage bootstrap/cache
-```
+Render handles this automatically
 
-**Clear cache:**
+**Cache issues:**
 ```bash
-railway run php artisan cache:clear
-railway run php artisan config:clear
+# Add to build command
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 ```
 
 ## 📝 License
